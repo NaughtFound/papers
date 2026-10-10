@@ -410,7 +410,8 @@
           <button class="btn" id="themeBtn" type="button">Theme</button>
         </div>
       </div>
-      <p class="tagline">Notes and open discussion on the papers I read in general.</p>
+      <p class="tagline">Notes and open discussion on the papers behind my PhD work in generative models, causality and
+        medical imaging.</p>
     </div>
   </header>
 
@@ -442,10 +443,19 @@
     $("#repoLink").href = "https://github.com/" + CONFIG.repo;
 
     /* theme toggle */
+    const osDark = matchMedia("(prefers-color-scheme:dark)");
+    const theme = () => document.documentElement.dataset.theme || (osDark.matches ? "dark" : "light");
+
+    /* keep the giscus iframe in step with the page theme */
+    function syncGiscus() {
+      const f = document.querySelector("iframe.giscus-frame");
+      if (f) f.contentWindow.postMessage({ giscus: { setConfig: { theme: theme() } } }, "https://giscus.app");
+    }
+    osDark.addEventListener("change", syncGiscus);
+
     $("#themeBtn").onclick = () => {
-      const r = document.documentElement;
-      const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme:dark)").matches;
-      r.dataset.theme = dark ? "light" : "dark";
+      document.documentElement.dataset.theme = theme() === "dark" ? "light" : "dark";
+      syncGiscus();
     };
 
     async function load() {
@@ -537,7 +547,7 @@
           "data-repo": CONFIG.repo, "data-repo-id": g.repoId, "data-category": g.category,
           "data-category-id": g.categoryId, "data-mapping": "specific", "data-term": p.slug,
           "data-reactions-enabled": "1", "data-input-position": "top",
-          "data-theme": "preferred_color_scheme", "data-lang": "en"
+          "data-theme": theme(), "data-lang": "en"
         }).forEach(([k, v]) => s.setAttribute(k, v));
         box.appendChild(s);
         return;
