@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Papers I read</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --paper: #F5F6F4;
+      --card: #FFFFFF;
+      --ink: #18212B;
+      --muted: #5B6672;
+      --line: #DDE1E4;
+      --accent: #1F4FD8;
+      --accent-soft: #E6ECFB;
+      --mark: #FFE9A3;
+      --mark-ink: #4A3A00;
+      --serif: "Literata", Georgia, serif;
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --paper: #12171D;
+        --card: #1A2129;
+        --ink: #E7ECF1;
+        --muted: #98A4B0;
+        --line: #2B343E;
+        --accent: #7FA2FF;
+        --accent-soft: #1F2B47;
+        --mark: #4A3F12;
+        --mark-ink: #FFE9A3
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --paper: #12171D;
+      --card: #1A2129;
+      --ink: #E7ECF1;
+      --muted: #98A4B0;
+      --line: #2B343E;
+      --accent: #7FA2FF;
+      --accent-soft: #1F2B47;
+      --mark: #4A3F12;
+      --mark-ink: #FFE9A3
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-padding-top: 1rem
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.6 var(--sans)
+    }
+
+    a {
+      color: var(--accent)
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px
+    }
+
+    header.site {
+      border-bottom: 1px solid var(--line);
+      padding: 28px 0 20px
+    }
+
+    header.site .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .brand {
+      font: 600 1.6rem/1.2 var(--serif);
+      color: var(--ink);
+      text-decoration: none
+    }
+
+    .tagline {
+      color: var(--muted);
+      margin: 6px 0 0;
+      max-width: 56ch
+    }
+
+    .btn {
+      font: 500 .875rem var(--sans);
+      background: var(--card);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block
+    }
+
+    .btn:hover {
+      border-color: var(--accent)
+    }
+
+    .tools {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 22px 0 8px
+    }
+
+    .tools input {
+      flex: 1 1 240px;
+      font: inherit;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--card);
+      color: var(--ink)
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px
+    }
+
+    .chip {
+      font: 500 .8125rem var(--sans);
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 3px 12px;
+      cursor: pointer
+    }
+
+    .chip[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff
+    }
+
+    /* paper list */
+    .item {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: inherit
+    }
+
+    .item:hover {
+      border-color: var(--accent)
+    }
+
+    .tile {
+      border-right: 1px solid var(--line);
+      padding-right: 14px;
+      text-align: center
+    }
+
+    .tile b {
+      display: block;
+      font: 600 1.5rem/1.1 var(--serif)
+    }
+
+    .tile span {
+      font-size: .75rem;
+      color: var(--muted)
+    }
+
+    .item h2 {
+      font: 600 1.2rem/1.3 var(--serif);
+      margin: 0 0 4px
+    }
+
+    .authors {
+      color: var(--muted);
+      font-size: .875rem;
+      margin: 0 0 8px
+    }
+
+    .item p.sum {
+      margin: 0 0 10px
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: .8125rem;
+      color: var(--muted)
+    }
+
+    .tag {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 4px;
+      padding: 1px 8px
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 40px 0;
+      text-align: center
+    }
+
+    /* paper page */
+    .back {
+      display: inline-block;
+      margin: 24px 0 8px;
+      font-size: .9rem
+    }
+
+    article h1 {
+      font: 600 2rem/1.25 var(--serif);
+      margin: 8px 0 6px
+    }
+
+    .links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0 24px
+    }
+
+    .takeaway {
+      background: var(--mark);
+      color: var(--mark-ink);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 24px 0
+    }
+
+    .takeaway h3 {
+      margin: 0 0 6px;
+      font: 600 1rem var(--sans)
+    }
+
+    .takeaway ul {
+      margin: 0;
+      padding-left: 20px
+    }
+
+    .prose {
+      font-family: var(--serif);
+      max-width: 68ch
+    }
+
+    .prose h2 {
+      font: 600 1.35rem/1.3 var(--serif);
+      margin: 32px 0 8px
+    }
+
+    .prose p,
+    .prose li {
+      margin: 0 0 14px
+    }
+
+    .prose blockquote {
+      margin: 0 0 14px;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+      color: var(--muted)
+    }
+
+    .prose code {
+      background: var(--accent-soft);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: .9em
+    }
+
+    #discussion {
+      margin: 48px 0 80px;
+      border-top: 1px solid var(--line);
+      padding-top: 24px
+    }
+
+    #discussion h2 {
+      font: 600 1.3rem var(--serif);
+      margin: 0 0 4px
+    }
+
+    .note {
+      background: var(--card);
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: var(--muted);
+      font-size: .9rem;
+      margin: 12px 0 20px
+    }
+
+    .note code {
+      background: var(--accent-soft);
+      padding: 1px 5px;
+      border-radius: 4px
+    }
+
+    .cmt {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      margin-bottom: 16px
+    }
+
+    .av {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 600
+    }
+
+    .cmt .box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 14px
+    }
+
+    .cmt .who {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-bottom: 4px
+    }
+
+    .cmt .who b {
+      color: var(--ink)
+    }
+
+    .cmt p {
+      margin: 0
+    }
+
+    .reply {
+      margin-left: 48px
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 20px 0 40px;
+      color: var(--muted);
+      font-size: .85rem
+    }
+
+    @media (max-width:560px) {
+      .item {
+        grid-template-columns: 1fr
+      }
+
+      .tile {
+        border: 0;
+        text-align: left;
+        padding: 0;
+        display: flex;
+        gap: 8px;
+        align-items: baseline
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site">
+    <div class="wrap">
+      <div class="row">
+        <a class="brand" href="#/">Papers I read</a>
+        <div style="display:flex;gap:8px">
+          <a class="btn" id="repoLink" href="#" target="_blank" rel="noopener">Repository</a>
+          <button class="btn" id="themeBtn" type="button">Theme</button>
+        </div>
+      </div>
+      <p class="tagline">Notes and open discussion on the papers I read in general.</p>
+    </div>
+  </header>
+
+  <main class="wrap" id="app" aria-live="polite"></main>
+
+  <footer>
+    <div class="wrap">Add a paper by committing a file to <code>papers/</code> in the repository. Discussion lives in
+      GitHub Discussions.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script>
+    /* ============ 1. CONFIGURE ============ */
+    const CONFIG = {
+      repo: "NaughtFound/papers",        // GitHub repo that holds this site and papers/index.json
+      // Get these four values from https://giscus.app after enabling Discussions on the repo:
+      giscus: { repoId: "R_kgDOVDasDw", category: "Paper Discussion", categoryId: "DIC_kwDOVDasD84DHeaw" }
+    };
+
+    /* ============ 2. DATA ============
+       The site first tries to load papers/index.json from your repo (same folder as this page).
+       Each entry looks like the samples below. "body" holds Markdown, or use "bodyUrl": "papers/ddpm.md". */
+    const SAMPLE = [
+      {
+        slug: "ddpm", title: "Denoising Diffusion Probabilistic Models",
+        authors: "Jonathan Ho, Ajay Jain, Pieter Abbeel", year: 2020, venue: "NeurIPS",
+        arxiv: "2006.11239", code: "https://github.com/hojonathanho/diffusion",
+        tags: ["diffusion", "generative"], added: "2026-09-28",
+        summary: "Shows that a simple noise-prediction objective trains diffusion models that rival GANs on image quality.",
+        takeaways: ["Predicting the noise is easier to optimise than predicting the image.", "The simplified loss drops the weighting term and works better in practice.", "Sampling needs about 1000 steps, which is the main cost."],
+        body: `## Why I read it
+This is the paper that made diffusion practical. My thesis builds on it, so I wanted to re-read the training objective carefully.
+
+## The idea
+Gradually add Gaussian noise to an image over many steps, then train a network to reverse each step. The network predicts the noise that was added, and the loss is a plain mean squared error.
+
+> The weighted variational bound is replaced by an unweighted version that puts more focus on harder denoising steps.
+
+## What I would question
+- Slow sampling. Later work such as DDIM trades steps for quality.
+- No notion of cause and effect: the model learns correlations in pixels, which matters for medical images.
+
+## Open question for the discussion
+How would you inject a causal graph into the forward process without breaking the closed-form noising step?`,
+        discussion: [
+          { u: "mgh", t: "I think the noise-prediction trick is the real contribution. Does anyone know a clean derivation of why it matches score matching?" },
+          { u: "ali-r", t: "Section 3.2 of Song and Ermon's score matching paper gives the link. The two objectives differ by a scaling per timestep.", reply: true },
+          { u: "sara-k", t: "Has anyone tried this on small medical datasets? I saw mode collapse go away but overfitting appear." }
+        ]
+      },
+      {
+        slug: "ldm", title: "High-Resolution Image Synthesis with Latent Diffusion Models",
+        authors: "Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, Björn Ommer", year: 2022, venue: "CVPR",
+        arxiv: "2112.10752", code: "https://github.com/CompVis/latent-diffusion",
+        tags: ["diffusion", "medical imaging", "efficiency"], added: "2026-09-12",
+        summary: "Runs diffusion in the latent space of a pretrained autoencoder, cutting compute while keeping detail.",
+        takeaways: ["Compress first, diffuse second: most pixels carry perceptual detail the diffusion model does not need to learn.", "Cross-attention gives flexible conditioning on text or other inputs."],
+        body: `## Why I read it
+Training in pixel space is too expensive for 3D scans. Latent diffusion is the standard fix.
+
+## The idea
+Train an autoencoder once, then train the diffusion model on its latent codes. Conditioning enters through cross-attention layers in the denoising network.
+
+## Notes for medical imaging
+- Reconstruction quality of the autoencoder sets a ceiling. Subtle lesions can disappear.
+- Worth checking the latent space for anatomical structure before building on it.`,
+        discussion: [
+          { u: "mgh", t: "For CT slices, how do you validate that the autoencoder keeps small findings?" },
+          { u: "dr-nima", t: "We compared lesion detection on originals and reconstructions. A drop of even a few percent was enough to change our design.", reply: true }
+        ]
+      },
+      {
+        slug: "gradcam", title: "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization",
+        authors: "Ramprasaath R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam, Devi Parikh, Dhruv Batra", year: 2017, venue: "ICCV",
+        arxiv: "1610.02391", code: "https://github.com/ramprs/grad-cam",
+        tags: ["explainability", "computer vision"], added: "2026-08-30",
+        summary: "Uses gradients flowing into the last convolutional layer to highlight image regions behind a prediction.",
+        takeaways: ["Works on many CNN architectures without retraining.", "A heatmap shows where the model looked, not necessarily why it decided."],
+        body: `## Why I read it
+Explainability is one of my research interests, and Grad-CAM is the baseline every new method gets compared with.
+
+## The idea
+Weight each feature map of a chosen layer by the average gradient of the class score, sum them, and keep the positive part. The result is a coarse heatmap over the image.
+
+## Caveat
+Sanity checks later showed that some saliency methods barely change when model weights are randomised. Always run those checks before trusting a map.`,
+        discussion: [
+          { u: "sara-k", t: "Do you trust Grad-CAM for clinical use? I worry about maps that look plausible but are wrong." }
+        ]
+      }
+    ];
+
+    /* ============ 3. APP ============ */
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const md = t => window.marked ? marked.parse(t) : "<pre>" + esc(t) + "</pre>";
+    let papers = SAMPLE, activeTag = "", query = "";
+
+    $("#repoLink").href = "https://github.com/" + CONFIG.repo;
+
+    /* theme toggle */
+    $("#themeBtn").onclick = () => {
+      const r = document.documentElement;
+      const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme:dark)").matches;
+      r.dataset.theme = dark ? "light" : "dark";
+    };
+
+    async function load() {
+      try {
+        const r = await fetch("papers/index.json", { cache: "no-store" });
+        if (r.ok) papers = await r.json();
+      } catch (e) { /* keep sample data */ }
+      papers.sort((a, b) => (b.added || "").localeCompare(a.added || ""));
+      route();
+    }
+
+    function route() {
+      const m = location.hash.match(/^#\/p\/(.+)$/);
+      m ? showPaper(decodeURIComponent(m[1])) : showList();
+      window.scrollTo(0, 0);
+    }
+    addEventListener("hashchange", route);
+
+    function showList() {
+      document.title = "Papers I read";
+      const tags = [...new Set(papers.flatMap(p => p.tags || []))].sort();
+      $("#app").innerHTML = `
+    <div class="tools"><input id="q" type="search" placeholder="Search title, author or topic" aria-label="Search papers" value="${esc(query)}"></div>
+    <div class="chips" role="group" aria-label="Filter by topic">
+      ${tags.map(t => `<button class="chip" type="button" aria-pressed="${t === activeTag}" data-tag="${esc(t)}">${esc(t)}</button>`).join("")}
+    </div>
+    <div id="list"></div>`;
+      $("#q").oninput = e => { query = e.target.value; drawList(); };
+      document.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+        activeTag = activeTag === c.dataset.tag ? "" : c.dataset.tag; showList();
+      });
+      drawList();
+    }
+
+    function drawList() {
+      const q = query.toLowerCase();
+      const rows = papers.filter(p =>
+        (!activeTag || (p.tags || []).includes(activeTag)) &&
+        (!q || [p.title, p.authors, p.summary, (p.tags || []).join(" ")].join(" ").toLowerCase().includes(q)));
+      $("#list").innerHTML = rows.length ? rows.map(p => `
+    <a class="item" href="#/p/${encodeURIComponent(p.slug)}">
+      <div class="tile"><b>${esc(p.year)}</b><span>${esc(p.venue || "preprint")}</span></div>
+      <div>
+        <h2>${esc(p.title)}</h2>
+        <p class="authors">${esc(p.authors)}</p>
+        <p class="sum">${esc(p.summary)}</p>
+        <div class="meta">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}
+          ${p.added ? `<span>Added ${esc(p.added)}</span>` : ""}</div>
+      </div>
+    </a>`).join("") : `<p class="empty">No papers match. Clear the search or pick another topic.</p>`;
+    }
+
+    async function showPaper(slug) {
+      const p = papers.find(x => x.slug === slug);
+      if (!p) { $("#app").innerHTML = `<a class="back" href="#/">Back to all papers</a><p class="empty">Paper not found.</p>`; return; }
+      document.title = p.title + " · Papers I read";
+      let body = p.body || "";
+      if (!body && p.bodyUrl) { try { body = await (await fetch(p.bodyUrl)).text(); } catch (e) { body = "Could not load the notes file."; } }
+      const links = [
+        p.arxiv && [`arXiv:${p.arxiv}`, `https://arxiv.org/abs/${p.arxiv}`],
+        p.arxiv && ["PDF", `https://arxiv.org/pdf/${p.arxiv}`],
+        p.code && ["Code", p.code]
+      ].filter(Boolean);
+      $("#app").innerHTML = `
+    <a class="back" href="#/">Back to all papers</a>
+    <article>
+      <div class="meta">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}<span>${esc(p.venue || "preprint")} ${esc(p.year)}</span></div>
+      <h1>${esc(p.title)}</h1>
+      <p class="authors">${esc(p.authors)}</p>
+      <div class="links">${links.map(([l, u]) => `<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("")}</div>
+      <p class="prose" style="font-size:1.1rem">${esc(p.summary)}</p>
+      ${p.takeaways ? `<div class="takeaway"><h3>Key takeaways</h3><ul>${p.takeaways.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
+      <div class="prose">${md(body)}</div>
+    </article>
+    <section id="discussion"><h2>Discussion</h2>
+      <p class="authors">Comments are stored in this repository's GitHub Discussions. Sign in with GitHub to join.</p>
+      <div id="thread"></div>
+    </section>`;
+      mountDiscussion(p);
+    }
+
+    function mountDiscussion(p) {
+      const g = CONFIG.giscus, box = $("#thread");
+      if (g.repoId && g.categoryId) {
+        const s = document.createElement("script");
+        s.src = "https://giscus.app/client.js"; s.async = true; s.crossOrigin = "anonymous";
+        Object.entries({
+          "data-repo": CONFIG.repo, "data-repo-id": g.repoId, "data-category": g.category,
+          "data-category-id": g.categoryId, "data-mapping": "specific", "data-term": p.slug,
+          "data-reactions-enabled": "1", "data-input-position": "top",
+          "data-theme": "preferred_color_scheme", "data-lang": "en"
+        }).forEach(([k, v]) => s.setAttribute(k, v));
+        box.appendChild(s);
+        return;
+      }
+      box.innerHTML = `
+    <div class="note">This is a preview of the discussion. To turn on the real thread: enable Discussions on your repo, install the giscus app, then paste <code>repoId</code> and <code>categoryId</code> from giscus.app into <code>CONFIG</code> at the top of this file.</div>
+    ${(p.discussion || []).map(c => `
+      <div class="cmt ${c.reply ? "reply" : ""}">
+        <div class="av">${esc(c.u[0].toUpperCase())}</div>
+        <div class="box"><div class="who"><b>${esc(c.u)}</b> on GitHub</div><p>${esc(c.t)}</p></div>
+      </div>`).join("") || `<p class="empty">No comments yet. Start the discussion.</p>`}`;
+    }
+
+    load();
+  </script>
+</body>
+
+</html>
