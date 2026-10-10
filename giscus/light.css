@@ -1,0 +1,57 @@
+/* Giscus theme: Claude-style palette (light). Loaded through data-theme / setConfig. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap");
+
+main {
+  color-scheme: light;
+  font-family: "DM Sans", system-ui, sans-serif;
+  --color-btn-text: #141413;
+  --color-btn-bg: #FAF9F5;
+  --color-btn-border: rgb(20 20 19 / 15%);
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #F0EEE6;
+  --color-btn-hover-border: rgb(20 20 19 / 15%);
+  --color-btn-active-bg: #E8E6DC;
+  --color-btn-active-border: rgb(20 20 19 / 15%);
+  --color-btn-selected-bg: #E8E6DC;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-bg: #B9532F;
+  --color-btn-primary-border: transparent;
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #A64A29;
+  --color-btn-primary-hover-border: transparent;
+  --color-btn-primary-selected-bg: #963F22;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: #FFFFFF;
+  --color-btn-primary-disabled-bg: #E3B8A6;
+  --color-btn-primary-disabled-border: transparent;
+  --color-action-list-item-default-hover-bg: rgb(20 20 19 / 6%);
+  --color-segmented-control-bg: #F0EEE6;
+  --color-segmented-control-button-bg: #FFFFFF;
+  --color-segmented-control-button-selected-border: #83827B;
+  --color-fg-default: #141413;
+  --color-fg-muted: #6B6A64;
+  --color-fg-subtle: #83827B;
+  --color-canvas-default: #FFFFFF;
+  --color-canvas-overlay: #FFFFFF;
+  --color-canvas-inset: #F5F4ED;
+  --color-canvas-subtle: #F0EEE6;
+  --color-border-default: #E8E6DC;
+  --color-border-muted: #EFEDE4;
+  --color-neutral-muted: rgb(20 20 19 / 8%);
+  --color-accent-fg: #B9532F;
+  --color-accent-emphasis: #C15F3C;
+  --color-accent-muted: rgb(217 119 87 / 40%);
+  --color-accent-subtle: #F5E6DE;
+  --color-success-fg: #5E7345;
+  --color-attention-fg: #9A6700;
+  --color-attention-muted: rgb(212 167 44 / 40%);
+  --color-attention-subtle: #FBF1D3;
+  --color-danger-fg: #B53333;
+  --color-danger-muted: rgb(181 51 51 / 35%);
+  --color-danger-subtle: #FBE9E7;
+  --color-primer-shadow-inset: 0 0 transparent;
+  --color-social-reaction-bg-hover: #F0EEE6;
+  --color-social-reaction-bg-reacted-hover: #F5E6DE;
+}

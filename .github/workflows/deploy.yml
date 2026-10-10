@@ -6,6 +6,7 @@ on:
     paths:
       - "index.html"
       - "papers/**"
+      - "giscus/**"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -56,6 +57,7 @@ jobs:
           mkdir _site
           cp index.html _site/
           cp -r papers _site/papers
+          cp -r giscus _site/giscus
           touch _site/.nojekyll
 
       - name: Configure Pages

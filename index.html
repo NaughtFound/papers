@@ -8,47 +8,60 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=DM+Sans:wght@400;500;600&display=swap"
     rel="stylesheet">
   <style>
+    /* Claude-style palette: ivory + slate + clay */
     :root {
-      --paper: #F5F6F4;
+      color-scheme: light;
+      --paper: #FAF9F5;
       --card: #FFFFFF;
-      --ink: #18212B;
-      --muted: #5B6672;
-      --line: #DDE1E4;
-      --accent: #1F4FD8;
-      --accent-soft: #E6ECFB;
-      --mark: #FFE9A3;
-      --mark-ink: #4A3A00;
-      --serif: "Literata", Georgia, serif;
-      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --ink: #141413;
+      --muted: #6B6A64;
+      --line: #E8E6DC;
+      --accent: #B9532F;
+      --accent-soft: #F5E6DE;
+      --on-accent: #FFFFFF;
+      --mark: #EBDBBC;
+      --mark-ink: #4A3418;
+      --serif: "Source Serif 4", Georgia, serif;
+      --sans: "DM Sans", system-ui, sans-serif;
     }
 
     @media (prefers-color-scheme:dark) {
       :root:not([data-theme="light"]) {
-        --paper: #12171D;
-        --card: #1A2129;
-        --ink: #E7ECF1;
-        --muted: #98A4B0;
-        --line: #2B343E;
-        --accent: #7FA2FF;
-        --accent-soft: #1F2B47;
-        --mark: #4A3F12;
-        --mark-ink: #FFE9A3
+        color-scheme: dark;
+        --paper: #1F1E1D;
+        --card: #2A2927;
+        --ink: #FAF9F5;
+        --muted: #B0AEA5;
+        --line: #3D3C39;
+        --accent: #D97757;
+        --accent-soft: #3A2B25;
+        --on-accent: #141413;
+        --mark: #4B3E2B;
+        --mark-ink: #EBDBBC
       }
     }
 
     :root[data-theme="dark"] {
-      --paper: #12171D;
-      --card: #1A2129;
-      --ink: #E7ECF1;
-      --muted: #98A4B0;
-      --line: #2B343E;
-      --accent: #7FA2FF;
-      --accent-soft: #1F2B47;
-      --mark: #4A3F12;
-      --mark-ink: #FFE9A3
+      color-scheme: dark;
+      --paper: #1F1E1D;
+      --card: #2A2927;
+      --ink: #FAF9F5;
+      --muted: #B0AEA5;
+      --line: #3D3C39;
+      --accent: #D97757;
+      --accent-soft: #3A2B25;
+      --on-accent: #141413;
+      --mark: #4B3E2B;
+      --mark-ink: #EBDBBC
+    }
+
+    .giscus,
+    .giscus-frame {
+      width: 100%;
+      border: 0
     }
 
     * {
@@ -159,7 +172,7 @@
     .chip[aria-pressed="true"] {
       background: var(--accent);
       border-color: var(--accent);
-      color: #fff
+      color: var(--on-accent)
     }
 
     /* paper list */
@@ -446,10 +459,11 @@
     const osDark = matchMedia("(prefers-color-scheme:dark)");
     const theme = () => document.documentElement.dataset.theme || (osDark.matches ? "dark" : "light");
 
-    /* keep the giscus iframe in step with the page theme */
+    /* giscus uses the theme files in /giscus, matched to the page theme */
+    const giscusTheme = () => new URL("giscus/" + theme() + ".css", location.href).href;
     function syncGiscus() {
       const f = document.querySelector("iframe.giscus-frame");
-      if (f) f.contentWindow.postMessage({ giscus: { setConfig: { theme: theme() } } }, "https://giscus.app");
+      if (f) f.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme() } } }, "https://giscus.app");
     }
     osDark.addEventListener("change", syncGiscus);
 
@@ -547,7 +561,7 @@
           "data-repo": CONFIG.repo, "data-repo-id": g.repoId, "data-category": g.category,
           "data-category-id": g.categoryId, "data-mapping": "specific", "data-term": p.slug,
           "data-reactions-enabled": "1", "data-input-position": "top",
-          "data-theme": theme(), "data-lang": "en"
+          "data-theme": giscusTheme(), "data-lang": "en"
         }).forEach(([k, v]) => s.setAttribute(k, v));
         box.appendChild(s);
         return;

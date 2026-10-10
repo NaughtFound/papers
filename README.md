@@ -12,7 +12,21 @@ Each paper has a short write-up, and anyone can join the discussion by signing i
 - `papers/index.json` lists every paper and its details.
 - `papers/<slug>.md` holds the notes for each paper, written in Markdown.
 - Comments use [giscus](https://giscus.app), which maps each paper to one GitHub Discussion thread.
+- `giscus/light.css` and `giscus/dark.css` style the comment box to match the site's light and dark themes.
 - `.github/workflows/deploy.yml` checks the JSON and publishes the site to GitHub Pages whenever you push to `main`.
+
+```
+index.html
+papers/
+├── index.json
+├── ddpm.md
+├── ldm.md
+└── gradcam.md
+giscus/
+├── light.css
+└── dark.css
+.github/workflows/deploy.yml
+```
 
 ## Add a paper
 
