@@ -1,0 +1,71 @@
+name: Deploy papers site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "papers/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push replaces a run that is still waiting.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate papers/index.json
+        run: |
+          python3 - <<'EOF'
+          import json, os, sys
+          papers = json.load(open("papers/index.json", encoding="utf-8"))
+          slugs, errors = set(), []
+          for i, p in enumerate(papers):
+              for key in ("slug", "title", "authors", "year", "summary"):
+                  if not p.get(key):
+                      errors.append(f"entry {i}: missing '{key}'")
+              if p.get("slug") in slugs:
+                  errors.append(f"entry {i}: duplicate slug '{p['slug']}'")
+              slugs.add(p.get("slug"))
+              url = p.get("bodyUrl")
+              if url and not os.path.exists(url):
+                  errors.append(f"entry {i}: bodyUrl file not found: {url}")
+          if errors:
+              print("\n".join(errors))
+              sys.exit(1)
+          print(f"{len(papers)} papers OK")
+          EOF
+
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp index.html _site/
+          cp -r papers _site/papers
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

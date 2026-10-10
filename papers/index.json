@@ -18,22 +18,7 @@
       "The simplified loss drops the weighting term and works better in practice.",
       "Sampling needs about 1000 steps, which is the main cost."
     ],
-    "body": "## Why I read it\nThis is the paper that made diffusion practical. My thesis builds on it, so I wanted to re-read the training objective carefully.\n\n## The idea\nGradually add Gaussian noise to an image over many steps, then train a network to reverse each step. The network predicts the noise that was added, and the loss is a plain mean squared error.\n\n> The weighted variational bound is replaced by an unweighted version that puts more focus on harder denoising steps.\n\n## What I would question\n- Slow sampling. Later work such as DDIM trades steps for quality.\n- No notion of cause and effect: the model learns correlations in pixels, which matters for medical images.\n\n## Open question for the discussion\nHow would you inject a causal graph into the forward process without breaking the closed-form noising step?",
-    "discussion": [
-      {
-        "u": "mgh",
-        "t": "I think the noise-prediction trick is the real contribution. Does anyone know a clean derivation of why it matches score matching?"
-      },
-      {
-        "u": "ali-r",
-        "t": "Section 3.2 of Song and Ermon's score matching paper gives the link. The two objectives differ by a scaling per timestep.",
-        "reply": true
-      },
-      {
-        "u": "sara-k",
-        "t": "Has anyone tried this on small medical datasets? I saw mode collapse go away but overfitting appear."
-      }
-    ]
+    "bodyUrl": "papers/ddpm.md"
   },
   {
     "slug": "ldm",
@@ -54,18 +39,7 @@
       "Compress first, diffuse second: most pixels carry perceptual detail the diffusion model does not need to learn.",
       "Cross-attention gives flexible conditioning on text or other inputs."
     ],
-    "body": "## Why I read it\nTraining in pixel space is too expensive for 3D scans. Latent diffusion is the standard fix.\n\n## The idea\nTrain an autoencoder once, then train the diffusion model on its latent codes. Conditioning enters through cross-attention layers in the denoising network.\n\n## Notes for medical imaging\n- Reconstruction quality of the autoencoder sets a ceiling. Subtle lesions can disappear.\n- Worth checking the latent space for anatomical structure before building on it.",
-    "discussion": [
-      {
-        "u": "mgh",
-        "t": "For CT slices, how do you validate that the autoencoder keeps small findings?"
-      },
-      {
-        "u": "dr-nima",
-        "t": "We compared lesion detection on originals and reconstructions. A drop of even a few percent was enough to change our design.",
-        "reply": true
-      }
-    ]
+    "bodyUrl": "papers/ldm.md"
   },
   {
     "slug": "gradcam",
@@ -85,12 +59,6 @@
       "Works on many CNN architectures without retraining.",
       "A heatmap shows where the model looked, not necessarily why it decided."
     ],
-    "body": "## Why I read it\nExplainability is one of my research interests, and Grad-CAM is the baseline every new method gets compared with.\n\n## The idea\nWeight each feature map of a chosen layer by the average gradient of the class score, sum them, and keep the positive part. The result is a coarse heatmap over the image.\n\n## Caveat\nSanity checks later showed that some saliency methods barely change when model weights are randomised. Always run those checks before trusting a map.",
-    "discussion": [
-      {
-        "u": "sara-k",
-        "t": "Do you trust Grad-CAM for clinical use? I worry about maps that look plausible but are wrong."
-      }
-    ]
+    "bodyUrl": "papers/gradcam.md"
   }
 ]
