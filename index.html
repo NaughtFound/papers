@@ -423,91 +423,21 @@
 
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
   <script>
-    /* ============ 1. CONFIGURE ============ */
+    /* ============ CONFIGURE ============ */
     const CONFIG = {
       repo: "NaughtFound/papers",        // GitHub repo that holds this site and papers/index.json
       // Get these four values from https://giscus.app after enabling Discussions on the repo:
       giscus: { repoId: "R_kgDOVDasDw", category: "Paper Discussion", categoryId: "DIC_kwDOVDasD84DHeaw" }
     };
 
-    /* ============ 2. DATA ============
-       The site first tries to load papers/index.json from your repo (same folder as this page).
-       Each entry looks like the samples below. "body" holds Markdown, or use "bodyUrl": "papers/ddpm.md". */
-    const SAMPLE = [
-      {
-        slug: "ddpm", title: "Denoising Diffusion Probabilistic Models",
-        authors: "Jonathan Ho, Ajay Jain, Pieter Abbeel", year: 2020, venue: "NeurIPS",
-        arxiv: "2006.11239", code: "https://github.com/hojonathanho/diffusion",
-        tags: ["diffusion", "generative"], added: "2026-09-28",
-        summary: "Shows that a simple noise-prediction objective trains diffusion models that rival GANs on image quality.",
-        takeaways: ["Predicting the noise is easier to optimise than predicting the image.", "The simplified loss drops the weighting term and works better in practice.", "Sampling needs about 1000 steps, which is the main cost."],
-        body: `## Why I read it
-This is the paper that made diffusion practical. My thesis builds on it, so I wanted to re-read the training objective carefully.
+    /* Papers are loaded from papers/index.json (see that file for the entry format).
+       Each entry can hold its notes inline in "body" (Markdown) or point to a file with "bodyUrl". */
 
-## The idea
-Gradually add Gaussian noise to an image over many steps, then train a network to reverse each step. The network predicts the noise that was added, and the loss is a plain mean squared error.
-
-> The weighted variational bound is replaced by an unweighted version that puts more focus on harder denoising steps.
-
-## What I would question
-- Slow sampling. Later work such as DDIM trades steps for quality.
-- No notion of cause and effect: the model learns correlations in pixels, which matters for medical images.
-
-## Open question for the discussion
-How would you inject a causal graph into the forward process without breaking the closed-form noising step?`,
-        discussion: [
-          { u: "mgh", t: "I think the noise-prediction trick is the real contribution. Does anyone know a clean derivation of why it matches score matching?" },
-          { u: "ali-r", t: "Section 3.2 of Song and Ermon's score matching paper gives the link. The two objectives differ by a scaling per timestep.", reply: true },
-          { u: "sara-k", t: "Has anyone tried this on small medical datasets? I saw mode collapse go away but overfitting appear." }
-        ]
-      },
-      {
-        slug: "ldm", title: "High-Resolution Image Synthesis with Latent Diffusion Models",
-        authors: "Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, Björn Ommer", year: 2022, venue: "CVPR",
-        arxiv: "2112.10752", code: "https://github.com/CompVis/latent-diffusion",
-        tags: ["diffusion", "medical imaging", "efficiency"], added: "2026-09-12",
-        summary: "Runs diffusion in the latent space of a pretrained autoencoder, cutting compute while keeping detail.",
-        takeaways: ["Compress first, diffuse second: most pixels carry perceptual detail the diffusion model does not need to learn.", "Cross-attention gives flexible conditioning on text or other inputs."],
-        body: `## Why I read it
-Training in pixel space is too expensive for 3D scans. Latent diffusion is the standard fix.
-
-## The idea
-Train an autoencoder once, then train the diffusion model on its latent codes. Conditioning enters through cross-attention layers in the denoising network.
-
-## Notes for medical imaging
-- Reconstruction quality of the autoencoder sets a ceiling. Subtle lesions can disappear.
-- Worth checking the latent space for anatomical structure before building on it.`,
-        discussion: [
-          { u: "mgh", t: "For CT slices, how do you validate that the autoencoder keeps small findings?" },
-          { u: "dr-nima", t: "We compared lesion detection on originals and reconstructions. A drop of even a few percent was enough to change our design.", reply: true }
-        ]
-      },
-      {
-        slug: "gradcam", title: "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization",
-        authors: "Ramprasaath R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam, Devi Parikh, Dhruv Batra", year: 2017, venue: "ICCV",
-        arxiv: "1610.02391", code: "https://github.com/ramprs/grad-cam",
-        tags: ["explainability", "computer vision"], added: "2026-08-30",
-        summary: "Uses gradients flowing into the last convolutional layer to highlight image regions behind a prediction.",
-        takeaways: ["Works on many CNN architectures without retraining.", "A heatmap shows where the model looked, not necessarily why it decided."],
-        body: `## Why I read it
-Explainability is one of my research interests, and Grad-CAM is the baseline every new method gets compared with.
-
-## The idea
-Weight each feature map of a chosen layer by the average gradient of the class score, sum them, and keep the positive part. The result is a coarse heatmap over the image.
-
-## Caveat
-Sanity checks later showed that some saliency methods barely change when model weights are randomised. Always run those checks before trusting a map.`,
-        discussion: [
-          { u: "sara-k", t: "Do you trust Grad-CAM for clinical use? I worry about maps that look plausible but are wrong." }
-        ]
-      }
-    ];
-
-    /* ============ 3. APP ============ */
+    /* ============ APP ============ */
     const $ = s => document.querySelector(s);
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const md = t => window.marked ? marked.parse(t) : "<pre>" + esc(t) + "</pre>";
-    let papers = SAMPLE, activeTag = "", query = "";
+    let papers = [], activeTag = "", query = "", loadError = "";
 
     $("#repoLink").href = "https://github.com/" + CONFIG.repo;
 
@@ -522,7 +452,8 @@ Sanity checks later showed that some saliency methods barely change when model w
       try {
         const r = await fetch("papers/index.json", { cache: "no-store" });
         if (r.ok) papers = await r.json();
-      } catch (e) { /* keep sample data */ }
+        else loadError = "Could not load papers/index.json (HTTP " + r.status + ").";
+      } catch (e) { loadError = "Could not load papers/index.json. Check that the file exists and is valid JSON."; }
       papers.sort((a, b) => (b.added || "").localeCompare(a.added || ""));
       route();
     }
@@ -565,7 +496,7 @@ Sanity checks later showed that some saliency methods barely change when model w
         <div class="meta">${(p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}
           ${p.added ? `<span>Added ${esc(p.added)}</span>` : ""}</div>
       </div>
-    </a>`).join("") : `<p class="empty">No papers match. Clear the search or pick another topic.</p>`;
+    </a>`).join("") : `<p class="empty">${esc(loadError || (papers.length ? "No papers match. Clear the search or pick another topic." : "No papers yet. Add an entry to papers/index.json."))}</p>`;
     }
 
     async function showPaper(slug) {
