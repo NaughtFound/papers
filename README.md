@@ -15,19 +15,6 @@ Each paper has a short write-up, and anyone can join the discussion by signing i
 - `giscus/light.css` and `giscus/dark.css` style the comment box to match the site's light and dark themes.
 - `.github/workflows/deploy.yml` checks the JSON and publishes the site to GitHub Pages whenever you push to `main`.
 
-```
-index.html
-papers/
-├── index.json
-├── ddpm.md
-├── ldm.md
-└── gradcam.md
-giscus/
-├── light.css
-└── dark.css
-.github/workflows/deploy.yml
-```
-
 ## Add a paper
 
 1. Write your notes in `papers/<slug>.md`. Start at the `##` headings, because the page already shows the title, authors, links, summary and takeaways.
