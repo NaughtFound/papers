@@ -1,64 +1,25 @@
 [
   {
-    "slug": "ddpm",
-    "title": "Denoising Diffusion Probabilistic Models",
-    "authors": "Jonathan Ho, Ajay Jain, Pieter Abbeel",
-    "year": 2020,
-    "venue": "NeurIPS",
-    "arxiv": "2006.11239",
-    "code": "https://github.com/hojonathanho/diffusion",
+    "slug": "higine",
+    "title": "From Cells to Survival: Hierarchical Analysis of Cell Inter-Relations in Multiplex Microscopy for Lung Cancer Prognosis",
+    "authors": "Edgren Schüllerqvist, Olle; Baumann, Jens; Lindblad, Joakim; Nordling, Love et al.",
+    "year": 2026,
+    "venue": "ICPR 2026",
+    "arxiv": "2512.08572",
+    "code": "https://github.com/MIDA-group/HiGINE",
     "tags": [
-      "diffusion",
-      "generative"
+      "GNN",
+      "mIF",
+      "Survival Predicting",
+      "Lung Cancer"
     ],
-    "added": "2026-09-28",
-    "summary": "Shows that a simple noise-prediction objective trains diffusion models that rival GANs on image quality.",
+    "added": "2026-10-14",
+    "summary": "A hierarchical GNN models local cell interactions and tissue-level organization in multiplex microscopy, with cancer-stage fusion further improving lung cancer survival risk stratification.",
     "takeaways": [
-      "Predicting the noise is easier to optimise than predicting the image.",
-      "The simplified loss drops the weighting term and works better in practice.",
-      "Sampling needs about 1000 steps, which is the main cost."
+      "Integrating cancer stage (CS) as complementary information enhances performance.",
+      "Each cell (node) in the graph is considered the same node type instead of using different node/cell types.",
+      "They used data augmentation to improve robustness by generating four sets of subsample graphs per core with varying overlaps."
     ],
-    "bodyUrl": "papers/ddpm.md"
-  },
-  {
-    "slug": "ldm",
-    "title": "High-Resolution Image Synthesis with Latent Diffusion Models",
-    "authors": "Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, Björn Ommer",
-    "year": 2022,
-    "venue": "CVPR",
-    "arxiv": "2112.10752",
-    "code": "https://github.com/CompVis/latent-diffusion",
-    "tags": [
-      "diffusion",
-      "medical imaging",
-      "efficiency"
-    ],
-    "added": "2026-09-12",
-    "summary": "Runs diffusion in the latent space of a pretrained autoencoder, cutting compute while keeping detail.",
-    "takeaways": [
-      "Compress first, diffuse second: most pixels carry perceptual detail the diffusion model does not need to learn.",
-      "Cross-attention gives flexible conditioning on text or other inputs."
-    ],
-    "bodyUrl": "papers/ldm.md"
-  },
-  {
-    "slug": "gradcam",
-    "title": "Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization",
-    "authors": "Ramprasaath R. Selvaraju, Michael Cogswell, Abhishek Das, Ramakrishna Vedantam, Devi Parikh, Dhruv Batra",
-    "year": 2017,
-    "venue": "ICCV",
-    "arxiv": "1610.02391",
-    "code": "https://github.com/ramprs/grad-cam",
-    "tags": [
-      "explainability",
-      "computer vision"
-    ],
-    "added": "2026-08-30",
-    "summary": "Uses gradients flowing into the last convolutional layer to highlight image regions behind a prediction.",
-    "takeaways": [
-      "Works on many CNN architectures without retraining.",
-      "A heatmap shows where the model looked, not necessarily why it decided."
-    ],
-    "bodyUrl": "papers/gradcam.md"
+    "bodyUrl": "papers/higine.md"
   }
 ]
