@@ -17,7 +17,7 @@
     "summary": "A hierarchical GNN models local cell interactions and tissue-level organization in multiplex microscopy, with cancer-stage fusion further improving lung cancer survival risk stratification.",
     "takeaways": [
       "Integrating cancer stage (CS) as complementary information enhances performance.",
-      "Each cell (node) in the graph is considered the same node type instead of using different node/cell types.",
+      "Each cell in the graph is considered the same node type, while cell type information is included as node features.",
       "They used data augmentation to improve robustness by generating four sets of subsample graphs per core with varying overlaps."
     ],
     "bodyUrl": "papers/higine.md"
