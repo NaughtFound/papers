@@ -1,17 +1,19 @@
 [
   {
-    "slug": "higine",
+    "slug": "edgren2026cells",
     "title": "From Cells to Survival: Hierarchical Analysis of Cell Inter-Relations in Multiplex Microscopy for Lung Cancer Prognosis",
     "authors": "Edgren Schüllerqvist, Olle; Baumann, Jens; Lindblad, Joakim; Nordling, Love et al.",
     "year": 2026,
-    "venue": "ICPR 2026",
+    "venue": "ICPR",
     "arxiv": "2512.08572",
     "code": "https://github.com/MIDA-group/HiGINE",
     "tags": [
       "GNN",
       "mIF",
+      "TME",
       "Survival Predicting",
-      "Lung Cancer"
+      "Lung Cancer",
+      "NSCLC"
     ],
     "added": "2026-10-14",
     "summary": "A hierarchical GNN models local cell interactions and tissue-level organization in multiplex microscopy, with cancer-stage fusion further improving lung cancer survival risk stratification.",
@@ -20,6 +22,24 @@
       "Each cell in the graph is considered the same node type, while cell type information is included as node features.",
       "They used data augmentation to improve robustness by generating four sets of subsample graphs per core with varying overlaps."
     ],
-    "bodyUrl": "papers/higine.md"
+    "bodyUrl": "papers/edgren2026cells.md"
+  },
+  {
+    "slug": "backman2023spatial",
+    "title": "Spatial immunophenotyping of the tumour microenvironment in non-small cell lung cancer",
+    "authors": "Max Backmana, Carina Strella, Amanda Lindberga et al.",
+    "year": 2023,
+    "venue": "EJC",
+    "doi": "10.1016/j.ejca.2023.02.012",
+    "tags": [
+      "TME",
+      "mIF",
+      "Lung Cancer",
+      "NSCLC"
+    ],
+    "added": "2026-10-14",
+    "summary": "",
+    "takeaways": [],
+    "bodyUrl": "papers/backman2023spatial.md"
   }
 ]
