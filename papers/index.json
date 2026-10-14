@@ -27,7 +27,7 @@
   {
     "slug": "backman2023spatial",
     "title": "Spatial immunophenotyping of the tumour microenvironment in non-small cell lung cancer",
-    "authors": "Max Backmana, Carina Strella, Amanda Lindberga et al.",
+    "authors": "Max Backman, Carina Strell, Amanda Lindberg et al.",
     "year": 2023,
     "venue": "EJC",
     "doi": "10.1016/j.ejca.2023.02.012",
@@ -38,8 +38,12 @@
       "NSCLC"
     ],
     "added": "2026-10-14",
-    "summary": "",
-    "takeaways": [],
+    "summary": "A multiplexed fluorescence imaging study that spatially quantified 13 immune-cell subsets and their interactions in 359 non-small cell lung cancer (NSCLC) cases.",
+    "takeaways": [
+      "Biological signals that contribute to anti-cancer immunity are crucially needed for better and more optimized clinical diagnostics and treatments.",
+      "Immune cells other than T cells have a stronger association with patient survival.",
+      "They used Next-Generation Sequencing (NGS) for mutation analysis."
+    ],
     "bodyUrl": "papers/backman2023spatial.md"
   }
 ]
