@@ -10,6 +10,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=DM+Sans:wght@400;500;600&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <style>
     /* Claude-style palette: ivory + slate + clay */
     :root {
@@ -26,6 +27,7 @@
       --mark-ink: #4A3418;
       --serif: "Source Serif 4", Georgia, serif;
       --sans: "DM Sans", system-ui, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     @media (prefers-color-scheme:dark) {
@@ -265,6 +267,11 @@
       margin: 16px 0 24px;
     }
 
+    .lead {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+    }
+
     .takeaway {
       background: var(--mark);
       color: var(--mark-ink);
@@ -283,18 +290,56 @@
       padding-left: 20px;
     }
 
+    /* rendered markdown */
     .prose {
       font-family: var(--serif);
+      overflow-wrap: anywhere;
+    }
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      font-family: var(--serif);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .prose h1 {
+      font-size: 1.6rem;
+      margin: 36px 0 10px;
     }
 
     .prose h2 {
-      font: 600 1.35rem/1.3 var(--serif);
+      font-size: 1.35rem;
       margin: 32px 0 8px;
+    }
+
+    .prose h3 {
+      font-size: 1.15rem;
+      margin: 26px 0 6px;
+    }
+
+    .prose h4 {
+      font-size: 1rem;
+      margin: 20px 0 4px;
     }
 
     .prose p,
     .prose li {
       margin: 0 0 14px;
+    }
+
+    .prose ul,
+    .prose ol {
+      padding-left: 24px;
+      margin: 0 0 14px;
+    }
+
+    .prose li>p,
+    .prose li>ul,
+    .prose li>ol {
+      margin-bottom: 6px;
     }
 
     .prose blockquote {
@@ -305,10 +350,66 @@
     }
 
     .prose code {
+      font-family: var(--mono);
       background: var(--accent-soft);
       padding: 1px 5px;
       border-radius: 4px;
-      font-size: .9em;
+      font-size: .88em;
+    }
+
+    .prose pre {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 0 0 16px;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    .prose pre code {
+      background: none;
+      padding: 0;
+      font-size: .85rem;
+      overflow-wrap: normal;
+    }
+
+    .prose img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .prose .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 0 0 16px;
+    }
+
+    .prose hr {
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin: 28px 0;
+    }
+
+    .prose table {
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      margin: 0 0 16px;
+      font-size: .95rem;
+    }
+
+    .prose th,
+    .prose td {
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      text-align: left;
+    }
+
+    .prose th {
+      background: var(--card);
+      font-weight: 600;
     }
 
     #discussion {
@@ -434,7 +535,11 @@
       GitHub Discussions.</div>
   </footer>
 
+  <!-- Markdown rendering: marked converts Markdown to HTML, DOMPurify sanitizes the result -->
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <!-- LaTeX: KaTeX renders the math -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script>
     /* ============ CONFIGURE ============ */
     const CONFIG = {
@@ -449,7 +554,40 @@
     /* ============ APP ============ */
     const $ = s => document.querySelector(s);
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    const md = t => window.marked ? marked.parse(t) : "<pre>" + esc(t) + "</pre>";
+
+    /* Markdown -> sanitized HTML (falls back to plain text if the libraries failed to load) */
+    if (window.DOMPurify) {
+      DOMPurify.addHook("afterSanitizeAttributes", n => {
+        if (n.tagName === "A" && n.getAttribute("href")) {
+          n.setAttribute("target", "_blank");
+          n.setAttribute("rel", "noopener noreferrer");
+        }
+      });
+    }
+    /* LaTeX: math is pulled out before marked runs (so Markdown cannot mangle _, \ or *),
+       then rendered with KaTeX and put back after sanitizing.
+       Supported: $inline$, $$display$$, \(inline\), \[display\]. Code spans and fences are left alone. */
+    function md(t) {
+      if (!(window.marked && window.DOMPurify)) return "<pre>" + esc(t ?? "") + "</pre>";
+      const math = [];
+      const stash = (raw, tex, display) => { math.push({ raw, tex, display }); return "@@MATH" + (math.length - 1) + "@@"; };
+      const src = String(t ?? "")
+        .split(/(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`)/g)
+        .map((part, i) => i % 2 ? part : part
+          .replace(/\$\$([\s\S]+?)\$\$/g, (m, x) => stash(m, x, true))
+          .replace(/\\\[([\s\S]+?)\\\]/g, (m, x) => stash(m, x, true))
+          .replace(/\\\((.+?)\\\)/g, (m, x) => stash(m, x, false))
+          .replace(/(?<![\\$])\$(?![\s$])([^$\n]+?)(?<![\s\\])\$(?!\d)/g, (m, x) => stash(m, x, false)))
+        .join("");
+      const html = DOMPurify.sanitize(marked.parse(src, { gfm: true, breaks: false }));
+      return html.replace(/@@MATH(\d+)@@/g, (_, i) => {
+        const m = math[+i];
+        if (!window.katex) return esc(m.raw);
+        try { return katex.renderToString(m.tex.trim(), { displayMode: m.display, throwOnError: false }); }
+        catch (e) { return esc(m.raw); }
+      });
+    }
+
     let papers = [], activeTag = "", query = "", loadError = "";
 
     $("#repoLink").href = "https://github.com/" + CONFIG.repo;
@@ -527,7 +665,12 @@
       if (!p) { $("#app").innerHTML = `<a class="back" href="#/">Back to all papers</a><p class="empty">Paper not found.</p>`; return; }
       document.title = p.title + " · Papers I read";
       let body = p.body || "";
-      if (!body && p.bodyUrl) { try { body = await (await fetch(p.bodyUrl)).text(); } catch (e) { body = "Could not load the notes file."; } }
+      if (!body && p.bodyUrl) {
+        try {
+          const r = await fetch(p.bodyUrl);
+          body = r.ok ? await r.text() : "Could not load the notes file (HTTP " + r.status + ").";
+        } catch (e) { body = "Could not load the notes file."; }
+      }
       const links = [
         p.arxiv && [`arXiv:${p.arxiv}`, `https://arxiv.org/abs/${p.arxiv}`],
         p.arxiv && ["PDF", `https://arxiv.org/pdf/${p.arxiv}`],
@@ -541,7 +684,7 @@
       <h1>${esc(p.title)}</h1>
       <p class="authors">${esc(p.authors)}</p>
       <div class="links">${links.map(([l, u]) => `<a class="btn" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("")}</div>
-      <p class="prose" style="font-size:1.1rem">${esc(p.summary)}</p>
+      <p class="lead">${esc(p.summary)}</p>
       ${p.takeaways ? `<div class="takeaway"><h3>Key takeaways</h3><ul>${p.takeaways.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>` : ""}
       <div class="prose">${md(body)}</div>
     </article>
