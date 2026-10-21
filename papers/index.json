@@ -68,5 +68,26 @@
       "Hierarchical fold-class conditioning provides control over the generated protein structures."
     ],
     "bodyUrl": "papers/geffner2025proteina.md"
+  },
+  {
+    "slug": "chen2018neural",
+    "title": "Neural Ordinary Differential Equations",
+    "authors": "Ricky T. Q. Chen, Yulia Rubanova, Jesse Bettencourt, David Duvenaud",
+    "year": 2018,
+    "venue": "NeurIPS",
+    "arxiv": "1806.07366",
+    "tags": [
+      "Neural ODE",
+      "Continuous Normalizing Flows",
+      "Generative Models"
+    ],
+    "added": "2026-10-21",
+    "summary": "Introduces a new family of deep neural networks parameterized by an ordinary differential equation (ODE), where network evaluation is computed using a numerical ODE solver, offering constant memory cost and continuous-depth modeling.",
+    "takeaways": [
+      "Replaces traditional discrete layers with a continuous-depth transformation defined by an ODE.",
+      "Uses the adjoint sensitivity method to compute gradients with constant memory consumption regardless of network depth.",
+      "Enables continuous normalizing flows and naturally handles irregularly-sampled time-series data."
+    ],
+    "bodyUrl": "papers/chen2018neural.md"
   }
 ]
