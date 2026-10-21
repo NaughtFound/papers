@@ -1,10 +1,10 @@
 # Papers I read
 
-Notes and open discussion on the papers I read, covering generative models, causality, explainability and medical imaging.
+Notes and open discussion on the papers I read, covering generative models, causality, explainability, healthcare and medicine.
 
 Live site: https://naughtfound.github.io/papers/
 
-Each paper has a short write-up, and anyone can join the discussion by signing in with GitHub. Comments are stored in this repo's [Discussions](../../discussions).
+Each paper has a short write-up, and anyone can join the discussion by signing in with GitHub. Comments are stored in this repo's [Discussions](https://github.com/NaughtFound/papers/discussions).
 
 ## How it works
 
