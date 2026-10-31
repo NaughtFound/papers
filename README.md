@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="assets/logo.jpeg" alt="Papers I Read Logo" width="200" style="border-radius: 50%;" />
+</p>
+
 # Papers I read
 
 Notes and open discussion on the papers I read, covering generative models, causality, explainability, healthcare and medicine.
