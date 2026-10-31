@@ -674,6 +674,8 @@
       const links = [
         p.arxiv && [`arXiv:${p.arxiv}`, `https://arxiv.org/abs/${p.arxiv}`],
         p.arxiv && ["PDF", `https://arxiv.org/pdf/${p.arxiv}`],
+        p.ori && [`OpenReview:${p.ori}`, `https://openreview.net/forum?id=${p.ori}`],
+        p.ori && ["PDF", `https://openreview.net/pdf?id=${p.ori}`],
         p.doi && [`DOI:${p.doi}`, `https://doi.org/${p.doi}`],
         p.code && ["Code", p.code]
       ].filter(Boolean);

@@ -70,24 +70,25 @@
     "bodyUrl": "papers/geffner2025proteina.md"
   },
   {
-    "slug": "chen2018neural",
-    "title": "Neural Ordinary Differential Equations",
-    "authors": "Ricky T. Q. Chen, Yulia Rubanova, Jesse Bettencourt, David Duvenaud",
-    "year": 2018,
-    "venue": "NeurIPS",
-    "arxiv": "1806.07366",
+    "slug": "anil2026fine",
+    "title": "Fine-Tuning Diffusion Models via Intermediate Distribution Shaping",
+    "authors": "Gautham Govind Anil, Shaan Ul Haque, Nithish Kannen, Dheeraj Nagaraj, Sanjay Shakkottai, Karthikeyan Shanmugam",
+    "year": 2026,
+    "venue": "ICLR",
+    "ori": "DYjyFDn8K7",
     "tags": [
-      "Neural ODE",
-      "Continuous Normalizing Flows",
-      "Generative Models"
+      "Diffusion Models",
+      "Reward Fine-Tuning",
+      "Rejection Sampling",
+      "Flow Matching"
     ],
-    "added": "2026-10-21",
-    "summary": "Introduces a new family of deep neural networks parameterized by an ordinary differential equation (ODE), where network evaluation is computed using a numerical ODE solver, offering constant memory cost and continuous-depth modeling.",
+    "added": "2026-10-31",
+    "summary": "Studies how to fine-tune pre-trained diffusion and flow models by shaping their distributions, including at intermediate noise levels, and shows gains across several generative tasks.",
     "takeaways": [
-      "Replaces traditional discrete layers with a continuous-depth transformation defined by an ODE.",
-      "Uses the adjoint sensitivity method to compute gradients with constant memory consumption regardless of network depth.",
-      "Enables continuous normalizing flows and naturally handles irregularly-sampled time-series data."
+      "Connects rejection-sampling-based fine-tuning to KL-regularized reward maximization.",
+      "Shaping intermediate noise levels can make fine-tuning more effective.",
+      "Extends the framework to improving flow models without explicit rewards."
     ],
-    "bodyUrl": "papers/chen2018neural.md"
+    "bodyUrl": "papers/anil2026fine.md"
   }
 ]
